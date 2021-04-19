@@ -46,41 +46,7 @@ on MC method: from n step to n + 1 step
 
 ---
 
-### コードで表す
 
-```python
-const isExist = getIsExistTrialStep()
-
-"""
-V_n: Function   ポテンシャルエネルギー関数
-r_n: Vector     全座標の配置(位置座標だけの場合は3N次元)
-r_trial: Vector ランダムに決定した座標を含む全座標の配置
-Returns: Boolean
-"""
-fun getIsExistTrialStep(V, r_n, r_trial):
-    # possibilityは1を超えることもある。
-    possibility = getBoltzmannFactor(V_n(r_trial))/getBoltzmannFactor(V_n(r_n))
-    if (possibility >= Math.random()):
-        return True
-    else:
-        return False
-
-"""
-r: Vector 全座標の配置
-Returns: Scolor
-"""
-fun V_n(r):
-    # some processes
-    return hoge
-
-"""
-V: Scolor ポテンシャル
-Returns: Scolor
-"""
-fun getBoltzmannFactor(V):
-    # some processes
-    return fuga
-```
 
 --- 
 ### MD, MCの違い
