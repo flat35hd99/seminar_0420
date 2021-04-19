@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: gaia_custom
 ---
 
 # コンピュータシミュレーションの基礎（p17 ~ p25）
@@ -22,12 +22,11 @@ theme: default
 ---
 
 ### 性質
-
 数値解析的：式を離散化（discretization）して、小さいstepを積み重ねる。
 Pros
  - 空間・時間分解能はどれだけでも小さい値を任意に設定できる。
  - 観察による誤差がない
-  
+
 Cons
  - 大きな系や長時間の運動を記述できない。
  - 数値計算特有の誤差がある
@@ -123,3 +122,88 @@ No. シミュレーションする系は小さく、これを指定した値に�
 ---
 
 ### 一般化座標とラグランジュ形式
+一般化座標
+$$
+q = (q_1, q_2, ... , q_n)
+$$
+
+$$
+L(q, \dot{q}) = T(q, \dot{q}) - V(q)
+$$
+
+ - $L$はq, $\dot{q}$の関数、Vはqのみの関数
+ - qと$\dot{q}$は互いに独立であるとして扱う
+
+---
+
+### 一般化座標とラグランジュ形式 作用
+$$
+S[q(t)] = \int_{t_1}^{t_2} L[q, \dot{q}] dt
+$$
+
+#### ハミルトンの原理
+> 作用Sの停留値を与える軌跡q(t)が古典運動に対応する
+
+> つまり、系の軌跡$q(t)$に対して微小変位$\delta q$を加えても S は変化しない
+
+---
+
+### 一般化座標とラグランジュ形式　ラグランジュの運動方程式の導出
+
+$$
+\begin{aligned}
+    S[q(t)] &= \int_{t_1}^{t_2} L[q, \dot{q}] dt \\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+    \delta S &= S[q(t) + \delta q(t)] - S[q(t)] \\
+    &= \int_{t_1}^{t_2} {L(t, q + \delta q, \dot{q} + \delta \dot{q}) - L(t, q, \dot{q})} dt
+\end{aligned}
+$$
+
+$$
+L(t, q + \delta q, \dot{q} + \delta \dot{q}) = L(t, q, \dot{q}) + \frac{\partial L}{\partial q} \delta q + \frac{\partial L}{\partial \dot{q}} \delta \dot{q}
+$$
+
+$$
+\delta S = \int_{t_1}^{t_2} \left(\frac{\partial L}{\partial q} \delta q + \frac{\partial L}{\partial \dot{q}} \delta \dot{q} \right) dt
+$$
+
+---
+$$
+\begin{aligned}
+ \int_{t_1}^{t_2} \frac{\partial L}{\partial \dot{q}} \delta \dot{q} dt &=  \int_{t_1}^{t_2} \frac{\partial L}{\partial \dot{q}} \frac{d\delta q}{dt} dt \\
+ &= \left[\frac{\partial L}{\partial \dot{q}} \delta q  \right]^{t_2}_{t_1} - \int_{t_1}^{t_2} \frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) \delta q dt
+\end{aligned}
+$$
+
+> $t = t_1, t_2$におけるq(t)の値は境界条件として与えられているので、軌跡の両端は初めから固定されているとみなされる。つまり、$t = t_1, t_2$においては$\delta q(t) = 0$　... 第一項の定積分は0となる。
+
+$$
+\delta S = \int^{t_2}_{t_1} \left( \frac{\partial L}{\partial q} - \frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) \right) \delta q dt
+$$
+
+$\delta S = 0$となるためには、$t_1$と$t_2$の間だの全ての時刻tで被積分関数が0
+
+$$
+\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) - \frac{\partial L}{\partial q} = 0
+$$
+
+---
+ラグランジュ(Lagrange)の運動方程式
+$$
+\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) - \frac{\partial L}{\partial q} = 0
+$$
+
+n次元系に対しても
+$$
+\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q_i}} \right) - \frac{\partial L}{\partial q_i} = 0
+$$
+とn組の連立微分方程式として記述される。
+
+ちなみに
+$$
+p_i = \frac{\partial L}{\partial \dot{q}_i}, F_i = \frac{\partial V}{\partial q_i}
+$$
