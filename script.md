@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: gaia_custom
+theme: gaia_gd
 ---
 
 # コンピュータシミュレーションの基礎（p17 ~ p25）
@@ -35,20 +35,36 @@ Cons
 
 ---
 
-### MCの方法
-担当範囲のMC法の説明はわかりにくかったため、（たぶん一番簡単な）$NVT$アンサンブルの場合をとても簡単に考えてみる。
+### Monte Carlo method
+$NVT$アンサンブルの場合を簡単に紹介
 
-on MC method: from n step to n + 1 step
-1. ランダムに次の座標$r_{trial}$を決定する
-2. 1で決定した座標$r_{trial}$が許容できるか（ありえそうか）判別する
+from $\nu$ - 1 step to $\nu$ step
+1. ランダム(1)に次の座標$r_{trial}$を決定する
+2. 1で決定した座標$r_{trial}$が許容できるか（ありえそうか）判別する(2)
    1. if (isExist == true) その座標であるとして移動して、次のstep(座標)を計算する
    2. else 移動しなかったとしてその場にとどまり、次のstep(座標)を計算する
 
 ---
 
+(1) 確率$\prod$は
+$$
+\prod \propto \exp(- \beta V_N \{ x^N(\nu) \})
+$$ 
 
+(2) 判別式のは系によって異なるが
+$$
+\frac{\prod_{trial}}{\prod_{\nu}} = \frac{\exp(- \beta V_N \{ x^N_{trial} \})}{\exp(- \beta V_N \{ x^N(\nu) \})}
+$$
 
---- 
+---
+
+$\frac{\prod_{trial}}{\prod_{\nu}}$は
+1. $\frac{\prod_{trial}}{\prod_{\nu}} \geq 1$のとき、採用
+2. $\frac{\prod_{trial}}{\prod_{\nu}} < 1$のとき
+   1. $\frac{\prod_{trial}}{\prod_{\nu}}$の確率で採用
+   2. $1 - \frac{\prod_{trial}}{\prod_{\nu}}$の確率で棄却
+
+---
 ### MD, MCの違い
 
 |                  | Molecular Dynamics | Monte Carlo | Molecular Mechanics | 
@@ -59,14 +75,9 @@ on MC method: from n step to n + 1 step
 
 > 教科書20P, 表1.2
 
-? MM methodにCURP論文のAMBERが出てる。あれれ。
-? 分子動力学に内包されてる？
-
 ---
 
 ## MD法のための準備
-
----
 
 ### 実験室とシミュレーションの違い
 
@@ -102,7 +113,7 @@ $$
 
 ---
 
-### 一般化座標とラグランジュ形式 作用
+### 一般化座標とラグランジュ形式
 $$
 S[q(t)] = \int_{t_1}^{t_2} L[q, \dot{q}] dt
 $$
@@ -113,8 +124,6 @@ $$
 > つまり、系の軌跡$q(t)$に対して微小変位$\delta q$を加えても S は変化しない
 
 ---
-
-### 一般化座標とラグランジュ形式　ラグランジュの運動方程式の導出
 
 $$
 \begin{aligned}
@@ -128,6 +137,8 @@ $$
     &= \int_{t_1}^{t_2} {L(t, q + \delta q, \dot{q} + \delta \dot{q}) - L(t, q, \dot{q})} dt
 \end{aligned}
 $$
+
+Lに対する一次のテイラー展開を考えると
 
 $$
 L(t, q + \delta q, \dot{q} + \delta \dot{q}) = L(t, q, \dot{q}) + \frac{\partial L}{\partial q} \delta q + \frac{\partial L}{\partial \dot{q}} \delta \dot{q}
@@ -151,17 +162,17 @@ $$
 \delta S = \int^{t_2}_{t_1} \left( \frac{\partial L}{\partial q} - \frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) \right) \delta q dt
 $$
 
-$\delta S = 0$となるためには、$t_1$と$t_2$の間だの全ての時刻tで被積分関数が0
+---
+
+$\delta S = 0$となるためには、$t_1$と$t_2$の間での全ての時刻tで被積分関数が0である必要あり。
 
 $$
 \frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) - \frac{\partial L}{\partial q} = 0
 $$
+
+ラグランジュ(Lagrange)の運動方程式が導出された。
 
 ---
-ラグランジュ(Lagrange)の運動方程式
-$$
-\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}} \right) - \frac{\partial L}{\partial q} = 0
-$$
 
 n次元系に対しても
 $$
@@ -171,5 +182,5 @@ $$
 
 ちなみに
 $$
-p_i = \frac{\partial L}{\partial \dot{q}_i}, F_i = \frac{\partial V}{\partial q_i}
+p_i = \frac{\partial L}{\partial \dot{q}_i}, F_i = - \frac{\partial V}{\partial q_i}
 $$
